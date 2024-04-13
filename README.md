@@ -10,6 +10,15 @@ Decryption: Reverses the encryption process by shifting the text in the input fi
 Components
 The application is divided into three main files:
 
+Usage
+To compile the program, you need a C compiler like GCC. Navigate to the directory containing the source files and run the following command:
+gcc -o file_cipher main.c cipher.c
+To encrypt a file, use:
+./file_cipher encrypt <shift> <input file> <output file>
+To decrypt a file, use:
+./file_cipher decrypt <shift> <input file> <output file>
+Where <shift> is the number of positions each letter in the text should be shifted by in the alphabet.
+
 cipher.h: Header file with declarations for the encryption and decryption functions.
 cipher.c: Contains the implementation of the encryption (cipher) and file processing functions.
 main.c: Handles user input and command-line arguments to control the flow of encryption and decryption processes.
