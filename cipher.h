@@ -1,7 +1,7 @@
 #ifndef CIPHER_H
 #define CIPHER_H
 
-#include <cypte.h> // for isalpha and islower functions 
+#include <ctype.h> // for isalpha and islower functions 
 
 //function to apply the caesar cipher on a character 
 char cipher(char ch, int shift);
