@@ -5,7 +5,7 @@
 
 int main(int argc, char *argv[]){
 	if(argc != 5) {
-		fprintf(stderr, "usage: %s <mode> <shift> <input file> <output file>\n", arg[0]);
+		fprintf(stderr, "usage: %s <mode> <shift> <input file> <output file>\n", argv[0]);
 		return EXIT_FAILURE;
 	}
 	int mode = (strcmp(argv[1], "decrypt") == 0) ? -1 : 1;
