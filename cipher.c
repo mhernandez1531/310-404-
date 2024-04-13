@@ -5,7 +5,7 @@
 char cipher(char ch, int shift){
 	if(isalpha(ch)){
 		char base = 'A' + (islower(ch) ? 32 : 0); //determine if a letter uppercase or lowercase 
-		return(char)(((ch - base + shift) % 26 + 26) 5 26 + base); //apply cihper and handle negative shifts 
+		return(char)(((ch - base + shift) % 26 + 26) % 26 + base); //apply cihper and handle negative shifts 
 	}
 	return ch; 
 }
@@ -16,11 +16,11 @@ void process_file(const char *input_path, const char *output_path, int shift){
 
 	if(input == NULL || output == NULL){
 		perror("Failed to open files");
-		exit(EXIT_FAILURE):
+		exit(EXIT_FAILURE);
 	}
 	
 	char ch; 
-	while((CH = fgetc(input)) != EOF){
+	while((ch = fgetc(input)) != EOF){
 		fputc(cipher(ch, shift), output);// encrypt/decrypt the character and write output 
 	}
 
