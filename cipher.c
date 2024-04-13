@@ -29,7 +29,7 @@ void process_file(const char *input_path, const char *output_path, int shift){
 }
 	
 
-
+/*
 FUNCTION cipher(character ch, integer shift)
     IF ch is a letter THEN
         IF ch is lowercase THEN
@@ -60,5 +60,4 @@ FUNCTION process_file(string input_path, string output_path, integer shift)
     CLOSE input file
     CLOSE output file
 END FUNCTION
-
-
+*/
