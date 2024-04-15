@@ -1,6 +1,16 @@
+TEST(CipherTests, CaesarCipherEncryptDecrypt) {
+    const char* test_string = "Hello, World!";
+    int shift = 3;
 
-#include <gtest/gtest.h>
+    // Test encryption
+    char* encrypted = caesar_cipher_string(test_string, shift);
+    EXPECT_STREQ(encrypted, "Khoor, Zruog!");
 
-#include "cipher_tests.hh"
+    // Test decryption
+    char* decrypted = caesar_cipher_string(encrypted, -shift);
+    EXPECT_STREQ(decrypted, test_string);
 
-
+    // Clean up memory
+    free(encrypted);
+    free(decrypted);
+}
