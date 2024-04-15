@@ -1,3 +1,8 @@
+#include <gtest/gtest.h>
+
+#include "cipher_tests.hh"
+
+
 TEST(CipherTests, CaesarCipherEncryptDecrypt) {
     const char* test_string = "Hello, World!";
     int shift = 3;
