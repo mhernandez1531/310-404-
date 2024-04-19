@@ -47,7 +47,6 @@ void process_file(const char *input_path, const char *output_path, int shift, ch
 		exit(EXIT_FAILURE);
 	}
 	
-	char mode = 'c';
 	char key[27], ch;
 	if(mode =='s'){
 		generate_substitution_key(key, "some_seed_string");
