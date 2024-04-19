@@ -4,14 +4,19 @@
 #include <string.h> 
 
 int main(int argc, char *argv[]){
-	if(argc != 5) {
+	if(argc < 5) {
 		fprintf(stderr, "usage: %s <mode> <shift> <input file> <output file>\n", argv[0]);
 		return EXIT_FAILURE;
 	}
-	int mode = (strcmp(argv[1], "decrypt") == 0) ? -1 : 1;
-	int shift = atoi(argv[2]) * mode; 
 
-	process_file(argv[3], argv[4], shift);
+	char mode = argv[1][0]; //'c' for caesar, 's' for substitution
+	int decrypt = strcmp(argv[2], "decrypt) == 0;
+	int shift = atoi(argv[3]);
+	if(decrypt) {
+		shift = -shift; //use negative shift for decryption 
+	} 
+
+	process_file(argv[4], argv[5], shift, mode);
 	
 	printf("File has been processed successfully.\n");
 	return EXIT_SUCCESS;
