@@ -1,8 +1,10 @@
 #include "cipher.h"
 #include <stdio.h> 
 #include <stdlib.h> 
+#include <string.h>
+#include <errno.h>
 
-char cipher(char ch, int shift){
+char caesar_cipher(char ch, int shift){
 	if(isalpha(ch)){
 		char base = 'A' + (islower(ch) ? 32 : 0); //determine if a letter uppercase or lowercase 
 		return(char)(((ch - base + shift) % 26 + 26) % 26 + base); //apply cihper and handle negative shifts 
@@ -10,19 +12,53 @@ char cipher(char ch, int shift){
 	return ch; 
 }
 
-void process_file(const char *input_path, const char *output_path, int shift){
+char substitution_cipher(char ch, const char *key, int decrypt) {
+	if(isalpha(ch)){
+		int index = toupper(ch) - 'A';
+		if(decrypt){
+			const char *pos = strchr(key, toupper(ch));
+			return(pos ? 'A' + (pos - key) : ch) + (islower(ch) ? 32 : 0);
+		} else {
+			return key[index] + (islower(ch) ? 32 : 0);
+		}
+	}
+	return ch;
+}
+
+void generate_substitution_key(char *key, const char *seed){
+	char standard_alphabet[27] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+	strcpy(key, standard_alphabet);
+	int seed_length = strlen(seed);
+	for(int i = 0; i <26; i++){
+		int j = (seed[i % seed_length] + i) % 26;
+		char temp = key[i];
+		key[i] = key[j];
+		key[j] = temp;
+	}
+}
+
+
+void process_file(const char *input_path, const char *output_path, int shift, char mode){
 	FILE *input = fopen(input_path, "r");
 	FILE *output = fopen(output_path, "w");
 
-	if(input == NULL || output == NULL){
-		perror("Failed to open files");
+	if(!input || !output){
+		fprintf(stderr, "Error opening files : %s\n", strerror(errno));
 		exit(EXIT_FAILURE);
 	}
 	
-	char ch; 
+	char key[27], ch;
+	if(mode =='s'){
+		generate_substitution_key(key, "some_seed_string");
+	}	
+ 
 	while((ch = fgetc(input)) != EOF){
-		fputc(cipher(ch, shift), output);// encrypt/decrypt the character and write output 
-	}
+		if(mode == 'c'){
+			fputc(caesar_cipher(ch, shift), output);// encrypt/decrypt the character and write output 
+		} else if (mode == 's'){
+			fputc(substitution_cipher(ch, key, shift < 0), output);
+		}
+	}	
 
 	fclose(input);
 	fclose(output);
