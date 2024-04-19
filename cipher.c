@@ -38,7 +38,7 @@ void generate_substitution_key(char *key, const char *seed){
 }
 
 
-void process_file(const char *input_path, const char *output_path, int shift){
+void process_file(const char *input_path, const char *output_path, int shift, char mode){
 	FILE *input = fopen(input_path, "r");
 	FILE *output = fopen(output_path, "w");
 

@@ -16,7 +16,7 @@ int main(int argc, char *argv[]){
 		shift = -shift; //use negative shift for decryption 
 	} 
 
-	process_file(argv[4], argv[5], shift, mode);
+	process_file(argv[3], argv[5], shift, mode);
 	
 	printf("File has been processed successfully.\n");
 	return EXIT_SUCCESS;
