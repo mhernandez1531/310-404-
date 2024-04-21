@@ -1,27 +1,50 @@
 #include "cipher.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h> 
+#include <string.h>
 
-int main(int argc, char *argv[]){
-	if(argc < 5) {
-		fprintf(stderr, "usage: %s <mode> <shift> <input file> <output file>\n", argv[0]);
-		return EXIT_FAILURE;
-	}
+int main(int argc, char *argv[]) {
+    if (argc == 1) {
+        printf("Welcome to File Cipher Program\n");
 
-	char mode = argv[1][0]; //'c' for caesar, 's' for substitution
-	int decrypt = strcmp(argv[2], "decrypt") == 0;
-	int shift = atoi(argv[3]);
-	if(decrypt) {
-		shift = -shift; //use negative shift for decryption 
-	} 
+        char mode;
+        int shift;
+        char input_file[100];
+        char output_file[100];
 
-	process_file(argv[3], argv[5], shift, mode);
-	
-	printf("File has been processed successfully.\n");
-	return EXIT_SUCCESS;
+        printf("\nEnter mode ('c' for Caesar, 's' for Substitution): ");
+        scanf(" %c", &mode);
+
+        printf("Enter shift: ");
+        scanf("%d", &shift);
+
+        printf("Enter input file name: ");
+        scanf("%s", input_file);
+
+        printf("Enter output file name: ");
+        scanf("%s", output_file);
+
+        process_file(input_file, output_file, shift, mode);
+
+        printf("\nFile has been processed successfully.\n");
+    } else if (argc == 5) {
+        char mode = argv[1][0]; //'c' for caesar, 's' for substitution
+        int decrypt = strcmp(argv[2], "decrypt") == 0;
+        int shift = atoi(argv[3]);
+        if (decrypt) {
+            shift = -shift; //use negative shift for decryption 
+        }
+
+        process_file(argv[3], argv[5], shift, mode);
+
+        printf("File has been processed successfully.\n");
+    } else {
+        fprintf(stderr, "usage: %s [<mode> <shift> <input file> <output file>]\n", argv[0]);
+        return EXIT_FAILURE;
+    }
+
+    return EXIT_SUCCESS;
 };
-
 
 /*
 START PROGRAM with arguments: mode, shift, input_file, output_file
