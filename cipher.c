@@ -4,6 +4,7 @@
 #include <string.h>
 #include <errno.h>
 #include <ctype.h>
+#include <unistd.h>
 
 #define ALPHABET_SIZE 26
 #define DEFAULT_SEED "some_seed_string"
