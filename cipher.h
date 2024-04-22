@@ -14,7 +14,10 @@ void generate_substitution_key(char *key, const char *seed);
 
 
 
+
 #endif
+=======
+/* CIPHER_H */
 
 /*
 DECLARE function cipher that takes a character and an integer shift
