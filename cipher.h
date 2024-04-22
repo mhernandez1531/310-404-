@@ -12,8 +12,7 @@ void process_file(const char *input_path, const char *output_path, int shift, ch
 char substitution_cipher(char ch, const char *key, int decrypt);
 void generate_substitution_key(char *key, const char *seed);
 
-
-#endif
+#endif /* CIPHER_H */
 
 /*
 DECLARE function cipher that takes a character and an integer shift
