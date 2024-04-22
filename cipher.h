@@ -4,13 +4,14 @@
 #include <ctype.h> // for isalpha and islower functions 
 
 //function to apply the caesar cipher on a character 
-char cipher(char ch, int shift);
+char caesar_cipher(char ch, int shift);
 
 //function to process the fie for encryption or decryption 
 void process_file(const char *input_path, const char *output_path, int shift, char mode);
 
 char substitution_cipher(char ch, const char *key, int decrypt);
 void generate_substitution_key(char *key, const char *seed);
+
 
 
 #endif
