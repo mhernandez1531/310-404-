@@ -4,7 +4,7 @@
 #include <string.h>
 
 int main(int argc, char *argv[]) {
-    if (argc == 5) {
+    if (argc == 1) {
         printf("Welcome to File Cipher Program\n");
 
         char mode;
@@ -29,11 +29,14 @@ int main(int argc, char *argv[]) {
         printf("\nFile has been processed successfully.\n");
     } else if (argc == 5) {
         char mode = argv[1][0]; //'c' for caesar, 's' for substitution
-        int decrypt = strcmp(argv[2], "decrypt") == 0;
-        int shift = atoi(argv[3]);
-        if (decrypt) {
-            shift = -shift; //use negative shift for decryption 
-        }
+	int shift = atoi(argv[2]);
+	char* input_file = argv[3];
+	char* output_file = argv[4];
+	 // int decrypt = strcmp(argv[2], "decrypt") == 0;
+       // int shift = atoi(argv[3]);
+       // if (decrypt) {
+         //   shift = -shift; //use negative shift for decryption 
+       / }
 
         process_file(argv[3], argv[5], shift, mode);
 
