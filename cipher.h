@@ -16,7 +16,7 @@ void generate_substitution_key(char *key, const char *seed);
 
 
 #endif
-=======
+
 /* CIPHER_H */
 
 /*
