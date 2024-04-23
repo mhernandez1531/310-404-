@@ -19,6 +19,14 @@ int main(int argc, char *argv[]) {
         printf("Enter shift: ");
         scanf("%d", &shift);
 
+	printf("Choose operation (e for encryption, d for decryption): ");
+	scanf(" %c", &enc_dec_choice);
+	
+	if (enc_dec_choice == 'd' || enc_dec_choice == 'D') {
+		shift = -abs(shift);  // Ensure shift is negative for decryption	} else {
+		shift = abs(shift);  // Ensure shift is positive for encryption
+        }	
+
         printf("Enter input file name: ");
         scanf("%s", input_file);
 
