@@ -12,6 +12,7 @@ int main(int argc, char *argv[]) {
         char input_file[100];
         char output_file[100];
 
+	do {
         printf("\nEnter mode ('c' for Caesar, 's' for Substitution): ");
         scanf(" %c", &mode);
 
@@ -27,9 +28,9 @@ int main(int argc, char *argv[]) {
         process_file(input_file, output_file, shift, mode);
 
         printf("\nFile has been processed successfully.\n");
-	printf(""Do you want to continue? (y/n): ");
-            scanf(" %c", &choice);
-        } while (choice == 'y' || choice == 'Y');
+	printf("Do you want to continue? (y/n): ");
+        scanf(" %c", &choice);
+      } while (choice == 'y' || choice == 'Y');
     } else if (argc == 5) {
         char mode = argv[1][0]; //'c' for caesar, 's' for substitution
 	int shift = atoi(argv[2]);
@@ -45,7 +46,7 @@ int main(int argc, char *argv[]) {
     }
 
     return EXIT_SUCCESS;
-};
+}
 
 /*
 START PROGRAM with arguments: mode, shift, input_file, output_file
