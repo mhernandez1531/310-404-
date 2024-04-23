@@ -102,17 +102,6 @@ void prompt_user_input() {
     process_file(input_path, output_path, shift, mode);
 }
 
-int main() {
-    char choice;
-    do {
-        prompt_user_input();
-        
-        printf("Do you want to continue? (y/n): ");
-        scanf(" %c", &choice);
-    } while (choice == 'y' || choice == 'Y');
-
-    return 0;
-}
 	
 
 /*
