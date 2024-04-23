@@ -7,7 +7,7 @@ int main(int argc, char *argv[]) {
     if (argc == 1) {
         printf("Welcome to File Cipher Program\n");
 
-        char mode;
+        char mode, choice;
         int shift;
         char input_file[100];
         char output_file[100];
