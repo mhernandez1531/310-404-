@@ -4,7 +4,6 @@
 #include <string.h>
 #include <errno.h>
 #include <ctype.h>
-#include <unistd.h>
 
 #define ALPHABET_SIZE 26
 #define DEFAULT_SEED "some_seed_string"
@@ -42,6 +41,33 @@ void generate_substitution_key(char *key, const char *seed){
     }
 }
 
+void process_file(const char *input_path, const char *output_path, int shift, char mode) {
+    FILE *input = fopen(input_path, "r");
+    FILE *output = fopen(output_path, "w");
+
+    if (!input || !output) {
+        fprintf(stderr, "Error opening files : %s\n", strerror(errno));
+        exit(EXIT_FAILURE);
+    }
+
+    char key[ALPHABET_SIZE + 1]; // +1 for null terminator
+    if (mode == 's') {
+        generate_substitution_key(key, DEFAULT_SEED);
+    }
+
+    char ch;
+    while ((ch = fgetc(input)) != EOF) {
+        if (mode == 'c') {
+            fputc(caesar_cipher(ch, shift), output);
+        } else if (mode == 's') {
+            fputc(substitution_cipher(ch, key, shift < 0), output);
+        }
+    }
+
+    fclose(input);
+    fclose(output);
+}
+
 void prompt_user_input() {
     char input_path[256]; // Assuming maximum path length of 255 characters
     char output_path[256];
@@ -75,38 +101,6 @@ void prompt_user_input() {
     process_file(input_path, output_path, shift, mode);
 }
 
-void encrypt_decrypt_file() {
-    char input_path[256]; // Assuming maximum path length of 255 characters
-    char output_path[256];
-    int shift;
-    char mode;
-
-    FILE *input = fopen(input_path, "r");
-    FILE *output = fopen(output_path, "w");
-
-    if (!input || !output) {
-        fprintf(stderr, "Error opening files : %s\n", strerror(errno));
-        exit(EXIT_FAILURE);
-    }
-
-    char key[ALPHABET_SIZE + 1]; // +1 for null terminator
-    if (mode == 's') {
-        generate_substitution_key(key, DEFAULT_SEED);
-    }
-
-    char ch;
-    while ((ch = fgetc(input)) != EOF) {
-        if (mode == 'c') {
-            fputc(caesar_cipher(ch, shift), output);
-        } else if (mode == 's') {
-            fputc(substitution_cipher(ch, key, shift < 0), output);
-        }
-    }
-
-    fclose(input);
-    fclose(output);
-}
-
 int main() {
     char choice;
     do {
@@ -118,7 +112,6 @@ int main() {
 
     return 0;
 }
-
 	
 
 /*
