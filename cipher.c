@@ -10,12 +10,49 @@
 #define DEFAULT_SEED "some_seed_string"
 
 char* rail_fence_encrypt(const char* message, int rails) {
-    // Implement Rail Fence Cipher encryption here
+   int len = strlen(message);
+    char* encrypted = (char*)malloc(len + 1);
+    if (!encrypted) {
+        perror("Memory allocation failed");
+        exit(EXIT_FAILURE);
+    }
+    int rail_len = 2 * rails - 2;
+    int k = 0;
+
+    for (int i = 0; i < rails; i++) {
+        for (int j = i; j < len; j += rail_len) {
+            encrypted[k++] = message[j];
+            if (i != 0 && i != rails - 1 && j + rail_len - 2 * i < len)
+                encrypted[k++] = message[j + rail_len - 2 * i];
+        }
+    }
+    encrypted[k] = '\0';
+    return encrypted;
+}
     return NULL; // Placeholder return
 }
 
 char* rail_fence_decrypt(const char* message, int rails) {
-    // Implement Rail Fence Cipher decryption here
+    int len = strlen(message);
+    char* decrypted = (char*)malloc(len + 1);
+    if (!decrypted) {
+        perror("Memory allocation failed");
+        exit(EXIT_FAILURE);
+    }
+    int rail_len = 2 * rails - 2;
+    int k = 0;
+    int cycle = 2 * (rails - 1);
+
+    for (int i = 0; i < rails; i++) {
+        for (int j = i; j < len; j += cycle) {
+            decrypted[j] = message[k++];
+            if (i != 0 && i != rails - 1 && j + cycle - 2 * i < len)
+                decrypted[j + cycle - 2 * i] = message[k++];
+        }
+    }
+    decrypted[len] = '\0';
+    return decrypted;
+}
     return NULL; // Placeholder return
 }
 
