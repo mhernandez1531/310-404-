@@ -24,8 +24,16 @@ char* rail_fence_cipher_decrypt(const char *ciphertext, int rails);
 // Function to process the file using the Rail Fence cipher
 void process_rail_fence_file(const char *input_path, const char *output_path, int shift, char mode);
 
-#endif /* CIPHER_H */
+// Function to encrypt a file using the Rail Fence cipher
+void rail_fence_encrypt_file(const char* input_path, const char* output_path, int rails);
 
+// Function to decrypt a file using the Rail Fence cipher
+void rail_fence_decrypt_file(const char* input_path, const char* output_path, int rails);
+
+// Function to write data to a file
+void write_to_file(const char* file_path, const char* data);
+
+#endif /* CIPHER_H */
 
 /* CIPHER_H */
 /*
