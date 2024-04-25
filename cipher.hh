@@ -14,4 +14,3 @@ extern "C" {
 #include "cipher.h"
 
 #endif
-
