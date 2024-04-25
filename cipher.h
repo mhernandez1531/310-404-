@@ -15,25 +15,26 @@ char substitution_cipher(char ch, const char *key, int decrypt);
 // Function to generate the Substitution key
 void generate_substitution_key(char *key, const char *seed);
 
-// Function to apply the Rail Fence cipher for encryption
+// Function for the Rail Fence cipher encryption
 char* rail_fence_cipher_encrypt(const char *plaintext, int rails);
 
-// Function to apply the Rail Fence cipher for decryption
+// Function for the Rail Fence cipher decryption
 char* rail_fence_cipher_decrypt(const char *ciphertext, int rails);
 
 // Function to process the file using the Rail Fence cipher
 void process_rail_fence_file(const char *input_path, const char *output_path, int shift, char mode);
 
-// Function to encrypt a file using the Rail Fence cipher
-void rail_fence_encrypt_file(const char* input_path, const char* output_path, int rails);
-
-// Function to decrypt a file using the Rail Fence cipher
-void rail_fence_decrypt_file(const char* input_path, const char* output_path, int rails);
-
 // Function to write data to a file
 void write_to_file(const char* file_path, const char* data);
 
+// Function to encrypt a file using Rail Fence cipher and write the result to another file
+void rail_fence_encrypt_file(const char *input_path, const char *output_path, int rails);
+
+// Function to decrypt a file encrypted with Rail Fence cipher and write the result to another file
+void rail_fence_decrypt_file(const char *input_path, const char *output_path, int rails);
+
 #endif /* CIPHER_H */
+
 
 /* CIPHER_H */
 /*
