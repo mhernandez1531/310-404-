@@ -13,14 +13,14 @@ int main(int argc, char *argv[]) {
         char output_file[100];
 
         do {
-            printf("\nEnter mode ('c' for Caesar, 's' for Substitution, 'r' for Rail Fence): ");
+            printf("\nEnter mode ('c' for Caesar, 's' for Substitution): ");
             scanf(" %c", &mode);
-            if (strchr("csrCSR", mode) == NULL) {
+            if (strchr("csCS", mode) == NULL) {
                 printf("Invalid mode.\n");
                 continue;
             }
 
-            printf("Enter shift or seed (for substitution): ");
+            printf("Enter shift: ");
             scanf("%d", &shift);
 
             printf("Choose operation (e for encryption, d for decryption): ");
@@ -37,28 +37,20 @@ int main(int argc, char *argv[]) {
             printf("Enter output file name: ");
             scanf("%s", output_file);
 
-            if (mode == 'r' || mode == 'R') {
-                process_rail_fence_file(input_file, output_file, shift, choice);
-            } else {
-                process_file(input_file, output_file, shift, mode);
-            }
+            process_file(input_file, output_file, shift, mode);
 
             printf("\nFile has been processed successfully.\n");
             printf("Do you want to continue? (y/n): ");
             scanf(" %c", &choice);
         } while (choice == 'y' || choice == 'Y');
-    } else if (argc == 6) {  // Adjust to expect mode, shift, operation, input file, output file
+    } else if (argc == 6) {
         char mode = argv[1][0];
         int shift = atoi(argv[2]);
-        char operation = argv[5][0]; // Make sure this character is e or d
         char* input_file = argv[3];
         char* output_file = argv[4];
+        char operation = argv[5][0];
 
-        if (mode == 'r' || mode == 'R') {
-            process_rail_fence_file(input_file, output_file, shift, operation);
-        } else {
-            process_file(input_file, output_file, shift, mode);
-        }
+        process_file(input_file, output_file, shift, mode);
 
         printf("File has been processed successfully.\n");
     } else {
@@ -68,6 +60,7 @@ int main(int argc, char *argv[]) {
 
     return EXIT_SUCCESS;
 }
+
 
 /*
 START PROGRAM with arguments: mode, shift, input_file, output_file
