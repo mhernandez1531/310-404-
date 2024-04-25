@@ -53,13 +53,9 @@ int main(int argc, char *argv[]) {
 
             if (mode == 'r' || mode == 'R') {
                 if (choice == 'e' || choice == 'E') {
-                    char* encrypted = rail_fence_encrypt_file(input_file, shift);
-                    write_to_file(output_file, encrypted);
-                    free(encrypted);
+                    rail_fence_cipher_encrypt_file(input_file, output_file, shift); // Corrected function call
                 } else if (choice == 'd' || choice == 'D') {
-                    char* decrypted = rail_fence_decrypt_file(input_file, shift);
-                    write_to_file(output_file, decrypted);
-                    free(decrypted);
+                    rail_fence_cipher_decrypt_file(input_file, output_file, shift); // Corrected function call
                 } else {
                     printf("Invalid choice for Rail Fence cipher operation.\n");
                     continue;
@@ -101,13 +97,9 @@ int main(int argc, char *argv[]) {
             }
 
             if (strcmp(argv[5], "e") == 0 || strcmp(argv[5], "E") == 0) {
-                char* encrypted = rail_fence_encrypt_file(input_file, rails);
-                write_to_file(output_file, encrypted);
-                free(encrypted);
+                rail_fence_cipher_encrypt_file(input_file, output_file, rails); // Corrected function call
             } else if (strcmp(argv[5], "d") == 0 || strcmp(argv[5], "D") == 0) {
-                char* decrypted = rail_fence_decrypt_file(input_file, rails);
-                write_to_file(output_file, decrypted);
-                free(decrypted);
+                rail_fence_cipher_decrypt_file(input_file, output_file, rails); // Corrected function call
             } else {
                 printf("Invalid choice for Rail Fence cipher operation.\n");
                 return EXIT_FAILURE;
@@ -131,13 +123,13 @@ START PROGRAM with arguments: mode, shift, input_file, output_file
         PRINT usage message
         EXIT program
     ENDIF
-    
+
     SET mode based on argument (encrypt or decrypt)
     SET shift as integer from argument
     IF mode is 'decrypt' THEN
         SET shift to -shift
     ENDIF
-    
+
     CALL function process_file with arguments input_file, output_file, and shift
     PRINT confirmation message that file processing was successful
 END PROGRAM
