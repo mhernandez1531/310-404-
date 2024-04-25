@@ -1,7 +1,7 @@
 # 310-404-
 
 File Encryption and Decryption
-This project is a simple command-line application written in C that allows for the encryption and decryption of text files using the Caesar cipher, a substitution cipher where each letter in the plaintext is shifted a certain number of places upwards or downwards in the alphabet.
+This project is a simple command-line application written in C that allows for the encryption and decryption of text files using the Caesar cipher, substitution cipher, and a Transposition Cipher i.e. Rail Fence Cipher.
 
 Features:
   Encryption- Shifts the text in the input file by a specified number of places in the alphabet and writes the encrypted text to an output file.
