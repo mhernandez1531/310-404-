@@ -29,8 +29,6 @@ char* rail_fence_encrypt(const char* message, int rails) {
     encrypted[k] = '\0';
     return encrypted;
 }
-    return NULL; // Placeholder return
-}
 
 char* rail_fence_decrypt(const char* message, int rails) {
     int len = strlen(message);
@@ -52,8 +50,6 @@ char* rail_fence_decrypt(const char* message, int rails) {
     }
     decrypted[len] = '\0';
     return decrypted;
-}
-    return NULL; // Placeholder return
 }
 
 char caesar_cipher(char ch, int shift){
