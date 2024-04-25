@@ -53,9 +53,9 @@ int main(int argc, char *argv[]) {
 
             if (mode == 'r' || mode == 'R') {
                 if (choice == 'e' || choice == 'E') {
-                    rail_fence_cipher_encrypt_file(input_file, output_file, shift); // Corrected function call
+                    rail_fence_encrypt_file(input_file, output_file, shift); // Corrected function call
                 } else if (choice == 'd' || choice == 'D') {
-                    rail_fence_cipher_decrypt_file(input_file, output_file, shift); // Corrected function call
+                    rail_fence_decrypt_file(input_file, output_file, shift); // Corrected function call
                 } else {
                     printf("Invalid choice for Rail Fence cipher operation.\n");
                     continue;
@@ -97,9 +97,9 @@ int main(int argc, char *argv[]) {
             }
 
             if (strcmp(argv[5], "e") == 0 || strcmp(argv[5], "E") == 0) {
-                rail_fence_cipher_encrypt_file(input_file, output_file, rails); // Corrected function call
+                rail_fence_encrypt_file(input_file, output_file, rails); // Corrected function call
             } else if (strcmp(argv[5], "d") == 0 || strcmp(argv[5], "D") == 0) {
-                rail_fence_cipher_decrypt_file(input_file, output_file, rails); // Corrected function call
+                rail_fence_decrypt_file(input_file, output_file, rails); // Corrected function call
             } else {
                 printf("Invalid choice for Rail Fence cipher operation.\n");
                 return EXIT_FAILURE;
