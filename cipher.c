@@ -112,6 +112,89 @@ void process_file(const char *input_path, const char *output_path, int shift, ch
     fclose(output);
 }
 
+void rail_fence_encrypt_file(const char* input_path, const char* output_path, int rails) {
+    // Open the input file for reading
+    FILE* input = fopen(input_path, "r");
+    if (!input) {
+        fprintf(stderr, "Error opening input file: %s\n", strerror(errno));
+        exit(EXIT_FAILURE);
+    }
+
+    // Open the output file for writing
+    FILE* output = fopen(output_path, "w");
+    if (!output) {
+        fclose(input);
+        fprintf(stderr, "Error opening output file: %s\n", strerror(errno));
+        exit(EXIT_FAILURE);
+    }
+
+    // Process the input file line by line
+    char buffer[1024];
+    while (fgets(buffer, sizeof(buffer), input)) {
+        // Encrypt the current line using Rail Fence cipher
+        char* encrypted = rail_fence_encrypt(buffer, rails);
+        
+        // Write the encrypted line to the output file
+        fprintf(output, "%s", encrypted);
+        
+        // Free the memory allocated for the encrypted line
+        free(encrypted);
+    }
+
+    // Close the input and output files
+    fclose(input);
+    fclose(output);
+}
+
+void rail_fence_decrypt_file(const char* input_path, const char* output_path, int rails) {
+    // Open the input file for reading
+    FILE* input = fopen(input_path, "r");
+    if (!input) {
+        fprintf(stderr, "Error opening input file: %s\n", strerror(errno));
+        exit(EXIT_FAILURE);
+    }
+
+    // Open the output file for writing
+    FILE* output = fopen(output_path, "w");
+    if (!output) {
+        fclose(input);
+        fprintf(stderr, "Error opening output file: %s\n", strerror(errno));
+        exit(EXIT_FAILURE);
+    }
+
+    // Process the input file line by line
+    char buffer[1024];
+    while (fgets(buffer, sizeof(buffer), input)) {
+        // Decrypt the current line using Rail Fence cipher
+        char* decrypted = rail_fence_decrypt(buffer, rails);
+        
+        // Write the decrypted line to the output file
+        fprintf(output, "%s", decrypted);
+        
+        // Free the memory allocated for the decrypted line
+        free(decrypted);
+    }
+
+    // Close the input and output files
+    fclose(input);
+    fclose(output);
+}
+
+void write_to_file(const char* file_path, const char* data) {
+    // Open the file for writing
+    FILE* file = fopen(file_path, "w");
+    if (!file) {
+        fprintf(stderr, "Error opening file: %s\n", strerror(errno));
+        exit(EXIT_FAILURE);
+    }
+
+    // Write the data to the file
+    fprintf(file, "%s", data);
+
+    // Close the file
+    fclose(file);
+}
+
 void prompt_user_input() {
     char input_path[256]; // Assuming maximum path length of 255 characters
     char output_path[256];
@@ -145,22 +228,7 @@ void prompt_user_input() {
     process_file(input_path, output_path, shift, mode);
 }
 
-	
-
 /*
-FUNCTION cipher(character ch, integer shift)
-    IF ch is a letter THEN
-        IF ch is lowercase THEN
-            base <- 'a'
-        ELSE
-            base <- 'A'
-        ENDIF
-        RETURN shifted character by 'shift' positions within alphabet bounds
-    ELSE
-        RETURN ch
-    ENDIF
-END FUNCTION
-
 FUNCTION process_file(string input_path, string output_path, integer shift)
     OPEN file input at input_path for reading
     OPEN file output at output_path for writing
