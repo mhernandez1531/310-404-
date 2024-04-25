@@ -7,11 +7,11 @@ TEST(CipherTests, CaesarCipherEncryptDecrypt) {
     int shift = 3;
 
     // Test encryption
-    char* encrypted = caesar_cipher_string(test_string, shift);
+    char* encrypted = caesar_cipher(test_string, shift);
     EXPECT_STREQ(encrypted, "Khoor, Zruog!");
 
     // Test decryption
-    char* decrypted = caesar_cipher_string(encrypted, -shift);
+    char* decrypted = caesar_cipher(encrypted, -shift);
     EXPECT_STREQ(decrypted, test_string);
 
     // Clean up memory
@@ -25,11 +25,11 @@ TEST(CipherTests, SubstitutionCipherEncryptDecrypt) {
     const char* key = "QWERTYUIOPASDFGHJKLZXCVBNM";
 
     // Test encryption
-    char* encrypted = substitution_cipher_encrypt(test_string, key);
+    char* encrypted = substitution_cipher(test_string, key, 0);
     EXPECT_STREQ(encrypted, "Qvrru, Fxrut!");
 
     // Test decryption
-    char* decrypted = substitution_cipher_decrypt(encrypted, key);
+    char* decrypted = substitution_cipher(encrypted, key, 1);
     EXPECT_STREQ(decrypted, test_string);
 
     // Clean up memory
@@ -43,11 +43,11 @@ TEST(CipherTests, RailFenceCipherEncryptDecrypt) {
     int rails = 3;
 
     // Test encryption
-    char* encrypted = rail_fence_cipher_encrypt(test_string, rails);
+    char* encrypted = rail_fence_encrypt(test_string, rails);
     EXPECT_STREQ(encrypted, "Horel,Wl lo!");
 
     // Test decryption
-    char* decrypted = rail_fence_cipher_decrypt(encrypted, rails);
+    char* decrypted = rail_fence_decrypt(encrypted, rails);
     EXPECT_STREQ(decrypted, test_string);
 
     // Clean up memory
