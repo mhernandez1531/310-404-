@@ -9,8 +9,8 @@
 #define ALPHABET_SIZE 26
 #define DEFAULT_SEED "some_seed_string"
 
-char* rail_fence_cipher_encrypt(const char* message, int rails) {
-   int len = strlen(message);
+char* rail_fence_encrypt(const char* message, int rails) {
+    int len = strlen(message);
     char* encrypted = (char*)malloc(len + 1);
     if (!encrypted) {
         perror("Memory allocation failed");
@@ -30,7 +30,7 @@ char* rail_fence_cipher_encrypt(const char* message, int rails) {
     return encrypted;
 }
 
-char* rail_fence_cipher_decrypt(const char* message, int rails) {
+char* rail_fence_decrypt(const char* message, int rails) {
     int len = strlen(message);
     char* decrypted = (char*)malloc(len + 1);
     if (!decrypted) {
@@ -113,14 +113,12 @@ void process_file(const char *input_path, const char *output_path, int shift, ch
 }
 
 void rail_fence_encrypt_file(const char* input_path, const char* output_path, int rails) {
-    // Open the input file for reading
     FILE* input = fopen(input_path, "r");
     if (!input) {
         fprintf(stderr, "Error opening input file: %s\n", strerror(errno));
         exit(EXIT_FAILURE);
     }
 
-    // Open the output file for writing
     FILE* output = fopen(output_path, "w");
     if (!output) {
         fclose(input);
@@ -128,33 +126,24 @@ void rail_fence_encrypt_file(const char* input_path, const char* output_path, in
         exit(EXIT_FAILURE);
     }
 
-    // Process the input file line by line
     char buffer[1024];
     while (fgets(buffer, sizeof(buffer), input)) {
-        // Encrypt the current line using Rail Fence cipher
         char* encrypted = rail_fence_encrypt(buffer, rails);
-
-        // Write the encrypted line to the output file
         fprintf(output, "%s", encrypted);
-
-        // Free the memory allocated for the encrypted line
         free(encrypted);
     }
 
-    // Close the input and output files
     fclose(input);
     fclose(output);
 }
 
 void rail_fence_decrypt_file(const char* input_path, const char* output_path, int rails) {
-    // Open the input file for reading
     FILE* input = fopen(input_path, "r");
     if (!input) {
         fprintf(stderr, "Error opening input file: %s\n", strerror(errno));
         exit(EXIT_FAILURE);
     }
 
-    // Open the output file for writing
     FILE* output = fopen(output_path, "w");
     if (!output) {
         fclose(input);
@@ -162,64 +151,50 @@ void rail_fence_decrypt_file(const char* input_path, const char* output_path, in
         exit(EXIT_FAILURE);
     }
 
-    // Process the input file line by line
     char buffer[1024];
     while (fgets(buffer, sizeof(buffer), input)) {
-        // Decrypt the current line using Rail Fence cipher
         char* decrypted = rail_fence_decrypt(buffer, rails);
-
-        // Write the decrypted line to the output file
         fprintf(output, "%s", decrypted);
-
-        // Free the memory allocated for the decrypted line
         free(decrypted);
     }
 
-    // Close the input and output files
     fclose(input);
     fclose(output);
 }
 
 void write_to_file(const char* file_path, const char* data) {
-    // Open the file for writing
     FILE* file = fopen(file_path, "w");
     if (!file) {
         fprintf(stderr, "Error opening file: %s\n", strerror(errno));
         exit(EXIT_FAILURE);
     }
 
-    // Write the data to the file
     fprintf(file, "%s", data);
 
-    // Close the file
     fclose(file);
 }
 
 void prompt_user_input() {
-    char input_path[256]; // Assuming maximum path length of 255 characters
+    char input_path[256];
     char output_path[256];
     int shift;
     char mode;
 
-    // Loop for reading input path until a valid one is provided
     do {
         printf("Enter input file path: ");
         scanf("%s", input_path);
     } while (access(input_path, F_OK) == -1);
 
-    // Loop for reading output path until a valid one is provided
     do {
         printf("Enter output file path: ");
         scanf("%s", output_path);
     } while (access(output_path, F_OK) != -1);
 
-    // Loop for reading shift until a valid one is provided
     do {
         printf("Enter shift value (-25 to 25): ");
         scanf("%d", &shift);
     } while (shift < -25 || shift > 25);
 
-    // Loop for reading mode until a valid one is provided
     do {
         printf("Enter mode (c for Caesar cipher, s for substitution cipher): ");
         scanf(" %c", &mode);
@@ -227,6 +202,7 @@ void prompt_user_input() {
 
     process_file(input_path, output_path, shift, mode);
 }
+
 
 /*
 FUNCTION process_file(string input_path, string output_path, integer shift)
