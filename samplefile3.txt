@@ -1,1 +1,7 @@
-
+Welcome to the encryption test file. This file contains a mix of upper and lower case letters, numbers, and special characters!
+Here are some numbers: 1234567890
+And here are some special characters: !@#$%^&*()_+-=[]{}|;:',.<>/?`
+Testing newline characters:
+Line one
+Line two
+Line three
