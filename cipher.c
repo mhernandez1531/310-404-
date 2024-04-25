@@ -10,11 +10,11 @@
 #define DEFAULT_SEED "some_seed_string"
 
 char caesar_cipher(char ch, int shift){
-    if(isalpha(ch)){
-        char base = 'A' + (islower(ch) ? 32 : 0); // determine if a letter is uppercase or lowercase 
-        return(char)(((ch - base + shift) % 26 + 26) % 26 + base); // apply cipher and handle negative shifts 
+    if (isalpha(ch)) {
+        char base = islower(ch) ? 'a' : 'A';  // Simpler base determination
+        return (char)(((ch - base + shift) % ALPHABET_SIZE + ALPHABET_SIZE) % ALPHABET_SIZE + base);  // Simplified modulo operation
     }
-    return ch; 
+    return ch;
 }
 
 char substitution_cipher(char ch, const char *key, int decrypt) {
