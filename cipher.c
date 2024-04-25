@@ -9,7 +9,7 @@
 #define ALPHABET_SIZE 26
 #define DEFAULT_SEED "some_seed_string"
 
-char* rail_fence_encrypt(const char* message, int rails) {
+char* rail_fence_cipher_encrypt(const char* message, int rails) {
    int len = strlen(message);
     char* encrypted = (char*)malloc(len + 1);
     if (!encrypted) {
@@ -30,7 +30,7 @@ char* rail_fence_encrypt(const char* message, int rails) {
     return encrypted;
 }
 
-char* rail_fence_decrypt(const char* message, int rails) {
+char* rail_fence_cipher_decrypt(const char* message, int rails) {
     int len = strlen(message);
     char* decrypted = (char*)malloc(len + 1);
     if (!decrypted) {
@@ -133,10 +133,10 @@ void rail_fence_encrypt_file(const char* input_path, const char* output_path, in
     while (fgets(buffer, sizeof(buffer), input)) {
         // Encrypt the current line using Rail Fence cipher
         char* encrypted = rail_fence_encrypt(buffer, rails);
-        
+
         // Write the encrypted line to the output file
         fprintf(output, "%s", encrypted);
-        
+
         // Free the memory allocated for the encrypted line
         free(encrypted);
     }
@@ -167,10 +167,10 @@ void rail_fence_decrypt_file(const char* input_path, const char* output_path, in
     while (fgets(buffer, sizeof(buffer), input)) {
         // Decrypt the current line using Rail Fence cipher
         char* decrypted = rail_fence_decrypt(buffer, rails);
-        
+
         // Write the decrypted line to the output file
         fprintf(output, "%s", decrypted);
-        
+
         // Free the memory allocated for the decrypted line
         free(decrypted);
     }
@@ -236,7 +236,7 @@ FUNCTION process_file(string input_path, string output_path, integer shift)
         PRINT error message
         EXIT program
     ENDIF
-    
+
     WHILE there are more characters to read from input
         READ character from input
         ENCRYPT character using cipher function with given shift
