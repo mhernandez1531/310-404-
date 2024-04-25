@@ -21,9 +21,6 @@ char* rail_fence_cipher_encrypt(const char *plaintext, int rails);
 // Function for the Rail Fence cipher decryption
 char* rail_fence_cipher_decrypt(const char *ciphertext, int rails);
 
-// Function to process the file using the Rail Fence cipher
-void process_rail_fence_file(const char *input_path, const char *output_path, int shift, char mode);
-
 // Function to write data to a file
 void write_to_file(const char* file_path, const char* data);
 
@@ -34,7 +31,6 @@ void rail_fence_encrypt_file(const char *input_path, const char *output_path, in
 void rail_fence_decrypt_file(const char *input_path, const char *output_path, int rails);
 
 #endif /* CIPHER_H */
-
 
 /* CIPHER_H */
 /*
