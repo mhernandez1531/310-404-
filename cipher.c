@@ -9,6 +9,14 @@
 #define ALPHABET_SIZE 26
 #define DEFAULT_SEED "some_seed_string"
 
+char* rail_fence_encrypt(const char* message, int rails) {
+    // Implement Rail Fence Cipher encryption here
+}
+
+char* rail_fence_decrypt(const char* message, int rails) {
+    // Implement Rail Fence Cipher decryption here
+}
+
 char caesar_cipher(char ch, int shift){
     if (isalpha(ch)) {
         char base = islower(ch) ? 'a' : 'A';  // Simpler base determination
