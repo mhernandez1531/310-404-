@@ -12,40 +12,49 @@ int main(int argc, char *argv[]) {
         char input_file[100];
         char output_file[100];
 
-	do {
-        printf("\nEnter mode ('c' for Caesar, 's' for Substitution): ");
-        scanf(" %c", &mode);
+        do {
+            printf("\nEnter mode ('c' for Caesar, 's' for Substitution, 'r' for Rail Fence): ");
+            scanf(" %c", &mode);
 
-        printf("Enter shift: ");
-        scanf("%d", &shift);
+            printf("Enter shift: ");
+            scanf("%d", &shift);
 
-	printf("Choose operation (e for encryption, d for decryption): ");
-	scanf(" %c", &enc_dec_choice);
-	
-	if (enc_dec_choice == 'd' || enc_dec_choice == 'D') {
-		shift = -abs(shift);  // Ensure shift is negative for decryption	} else {
-		shift = abs(shift);  // Ensure shift is positive for encryption
-        }	
+            printf("Choose operation (e for encryption, d for decryption): ");
+            scanf(" %c", &choice);
+            
+            if (choice == 'd' || choice == 'D') {
+                shift = -abs(shift);  // Ensure shift is negative for decryption
+            } else {
+                shift = abs(shift);  // Ensure shift is positive for encryption
+            }   
 
-        printf("Enter input file name: ");
-        scanf("%s", input_file);
+            printf("Enter input file name: ");
+            scanf("%s", input_file);
 
-        printf("Enter output file name: ");
-        scanf("%s", output_file);
+            printf("Enter output file name: ");
+            scanf("%s", output_file);
 
-        process_file(input_file, output_file, shift, mode);
+            if (mode == 'r' || mode == 'R') {
+                process_rail_fence_file(input_file, output_file, shift, choice);
+            } else {
+                process_file(input_file, output_file, shift, mode);
+            }
 
-        printf("\nFile has been processed successfully.\n");
-	printf("Do you want to continue? (y/n): ");
-        scanf(" %c", &choice);
-      } while (choice == 'y' || choice == 'Y');
+            printf("\nFile has been processed successfully.\n");
+            printf("Do you want to continue? (y/n): ");
+            scanf(" %c", &choice);
+        } while (choice == 'y' || choice == 'Y');
     } else if (argc == 5) {
-        char mode = argv[1][0]; //'c' for caesar, 's' for substitution
-	int shift = atoi(argv[2]);
-	char* input_file = argv[3];
-	char* output_file = argv[4];
+        char mode = argv[1][0]; //'c' for caesar, 's' for substitution, 'r' for Rail Fence
+        int shift = atoi(argv[2]);
+        char* input_file = argv[3];
+        char* output_file = argv[4];
 
-        process_file(input_file, output_file, shift, mode);
+        if (mode == 'r' || mode == 'R') {
+            process_rail_fence_file(input_file, output_file, shift, argv[5][0]);
+        } else {
+            process_file(input_file, output_file, shift, mode);
+        }
 
         printf("File has been processed successfully.\n");
     } else {
