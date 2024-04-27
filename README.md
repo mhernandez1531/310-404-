@@ -7,11 +7,17 @@ Features:
   Encryption- Shifts the text in the input file by a specified number of places in the alphabet and writes the encrypted text to an output file.
   Decryption- Reverses the encryption process by shifting the text in the input file back to its original form and writing the decrypted text to an output file.
 
+Supported Ciphers:
+Caesar cipher: Shifts letters by a given number of places in the alphabet.
+Substitution cipher: Replaces each letter with another letter according to a key.
+Rail Fence cipher: Rearranges the letters based on the number of rails specified.
+
 Components:
 The application is divided into three main files:
-  cipher.h- Header file with declarations for the encryption and decryption functions.
-  cipher.c- Contains the implementation of the encryption (cipher) and file processing functions.
-  main.c- Handles user input and command-line arguments to control the flow of encryption and decryption processes.
+  cipher.h - Header file with declarations for the encryption and decryption functions.
+  cipher.c - Contains the implementation of the encryption (cipher) and file processing functions.
+  main.c - Handles user input and command-line arguments to control the flow of encryption and decryption processes.
+  cipher_tests.cc - tests each cipher works 
 
 Usage:
 To compile the program, you need a C compiler like GCC. Navigate to the directory containing the source files and run the following command:
