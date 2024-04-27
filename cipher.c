@@ -151,13 +151,29 @@ void rail_fence_decrypt_file(const char* input_path, const char* output_path, in
         exit(EXIT_FAILURE);
     }
 
-    char buffer[1024];
-    while (fgets(buffer, sizeof(buffer), input)) {
-        char* decrypted = rail_fence_decrypt(buffer, rails);
-        fprintf(output, "%s", decrypted);
-        free(decrypted);
-    }
 
+    fseek(input, 0, SEEK_END);
+    long input_size = ftell(input);
+    rewind(input);
+    char* buffer = (char*)malloc(input_size + 1);
+    if (!buffer) {
+        fclose(input);
+        fclose(output);
+        fprintf(stderr, "Memory allocation failed\n");
+        exit(EXIT_FAILURE);
+    }
+    fread(buffer, 1, input_size, input);
+    buffer[input_size] = '\0';
+
+   
+    char* decrypted = rail_fence_decrypt(buffer, rails);
+
+
+    fprintf(output, "%s", decrypted);
+
+   
+    free(buffer);
+    free(decrypted);
     fclose(input);
     fclose(output);
 }
@@ -202,7 +218,6 @@ void prompt_user_input() {
 
     process_file(input_path, output_path, shift, mode);
 }
-
 
 /*
 FUNCTION process_file(string input_path, string output_path, integer shift)
