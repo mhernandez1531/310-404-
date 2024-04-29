@@ -9,13 +9,20 @@
 #define ALPHABET_SIZE 26
 #define DEFAULT_SEED "some_seed_string"
 
+// Rail Fence Cipher Encryption
 char* rail_fence_encrypt(const char* message, int rails) {
     int len = strlen(message);
-    char* encrypted = (char*)malloc(len + 1);
+    char* encrypted = (char*)malloc(len + 1);  // Allocate memory for the encrypted text
     if (!encrypted) {
         perror("Memory allocation failed");
         exit(EXIT_FAILURE);
     }
+
+    // Initialize the encrypted text with null characters
+    for (int i = 0; i < len; i++) {
+        encrypted[i] = '\0';
+    }
+
     int rail_len = 2 * rails - 2;
     int k = 0;
 
@@ -26,17 +33,24 @@ char* rail_fence_encrypt(const char* message, int rails) {
                 encrypted[k++] = message[j + rail_len - 2 * i];
         }
     }
-    encrypted[k] = '\0';
+    encrypted[k] = '\0';  // Add the null terminator
     return encrypted;
 }
 
+// Rail Fence Cipher Decryption
 char* rail_fence_decrypt(const char* message, int rails) {
     int len = strlen(message);
-    char* decrypted = (char*)malloc(len + 1);
+    char* decrypted = (char*)malloc(len + 1);  // Allocate memory for the decrypted text
     if (!decrypted) {
         perror("Memory allocation failed");
         exit(EXIT_FAILURE);
     }
+
+    // Initialize the decrypted text with null characters
+    for (int i = 0; i < len; i++) {
+        decrypted[i] = '\0';
+    }
+
     int rail_len = 2 * rails - 2;
     int k = 0;
     int cycle = 2 * (rails - 1);
@@ -48,18 +62,20 @@ char* rail_fence_decrypt(const char* message, int rails) {
                 decrypted[j + cycle - 2 * i] = message[k++];
         }
     }
-    decrypted[len] = '\0';
+    decrypted[len] = '\0';  // Add the null terminator
     return decrypted;
 }
 
-char caesar_cipher(char ch, int shift){
+// Caesar Cipher Encryption and Decryption
+char caesar_cipher(char ch, int shift) {
     if (isalpha(ch)) {
-        char base = islower(ch) ? 'a' : 'A';  // Simpler base determination
-        return (char)(((ch - base + shift) % ALPHABET_SIZE + ALPHABET_SIZE) % ALPHABET_SIZE + base);  // Simplified modulo operation
+        char base = islower(ch) ? 'a' : 'A';  // Base letter for lowercase or uppercase
+        return (char)(((ch - base + shift) % ALPHABET_SIZE + ALPHABET_SIZE) % ALPHABET_SIZE + base);
     }
     return ch;
 }
 
+// Substitution Cipher Encryption and Decryption
 char substitution_cipher(char ch, const char *key, int decrypt) {
     if(isalpha(ch)){
         int index = toupper(ch) - 'A';
@@ -73,6 +89,7 @@ char substitution_cipher(char ch, const char *key, int decrypt) {
     return ch;
 }
 
+// Generate Substitution Cipher Key
 void generate_substitution_key(char *key, const char *seed){
     char standard_alphabet[ALPHABET_SIZE + 1] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     strcpy(key, standard_alphabet);
@@ -85,6 +102,7 @@ void generate_substitution_key(char *key, const char *seed){
     }
 }
 
+// Process File using Caesar or Substitution Cipher
 void process_file(const char *input_path, const char *output_path, int shift, char mode) {
     FILE *input = fopen(input_path, "r");
     FILE *output = fopen(output_path, "w");
@@ -112,6 +130,7 @@ void process_file(const char *input_path, const char *output_path, int shift, ch
     fclose(output);
 }
 
+// Encrypt File using Rail Fence Cipher
 void rail_fence_encrypt_file(const char* input_path, const char* output_path, int rails) {
     FILE* input = fopen(input_path, "r");
     if (!input) {
@@ -137,6 +156,7 @@ void rail_fence_encrypt_file(const char* input_path, const char* output_path, in
     fclose(output);
 }
 
+// Decrypt File using Rail Fence Cipher
 void rail_fence_decrypt_file(const char* input_path, const char* output_path, int rails) {
     FILE* input = fopen(input_path, "r");
     if (!input) {
@@ -151,7 +171,6 @@ void rail_fence_decrypt_file(const char* input_path, const char* output_path, in
         exit(EXIT_FAILURE);
     }
 
-
     fseek(input, 0, SEEK_END);
     long input_size = ftell(input);
     rewind(input);
@@ -165,59 +184,19 @@ void rail_fence_decrypt_file(const char* input_path, const char* output_path, in
     fread(buffer, 1, input_size, input);
     buffer[input_size] = '\0';
 
-   
     char* decrypted = rail_fence_decrypt(buffer, rails);
-
 
     fprintf(output, "%s", decrypted);
 
-   
     free(buffer);
     free(decrypted);
     fclose(input);
     fclose(output);
 }
 
-void write_to_file(const char* file_path, const char* data) {
-    FILE* file = fopen(file_path, "w");
-    if (!file) {
-        fprintf(stderr, "Error opening file: %s\n", strerror(errno));
-        exit(EXIT_FAILURE);
-    }
+// Write Data to File
+void write_to_file(const char* file
 
-    fprintf(file, "%s", data);
-
-    fclose(file);
-}
-
-void prompt_user_input() {
-    char input_path[256];
-    char output_path[256];
-    int shift;
-    char mode;
-
-    do {
-        printf("Enter input file path: ");
-        scanf("%s", input_path);
-    } while (access(input_path, F_OK) == -1);
-
-    do {
-        printf("Enter output file path: ");
-        scanf("%s", output_path);
-    } while (access(output_path, F_OK) != -1);
-
-    do {
-        printf("Enter shift value (-25 to 25): ");
-        scanf("%d", &shift);
-    } while (shift < -25 || shift > 25);
-
-    do {
-        printf("Enter mode (c for Caesar cipher, s for substitution cipher): ");
-        scanf(" %c", &mode);
-    } while (mode != 'c' && mode != 's');
-
-    process_file(input_path, output_path, shift, mode);
-}
 
 /*
 FUNCTION process_file(string input_path, string output_path, integer shift)
