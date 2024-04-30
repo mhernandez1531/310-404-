@@ -9,75 +9,103 @@
 #define ALPHABET_SIZE 26
 #define DEFAULT_SEED "some_seed_string"
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+// Function to create and initialize the rail matrix for the rail fence cipher
+char** create_rail_matrix(int rails, int length) {
+    char** rail = malloc(rails * sizeof(char*));
+    for (int i = 0; i < rails; i++) {
+        rail[i] = calloc(length, sizeof(char)); // Use calloc to initialize to null characters
+    }
+    return rail;
+}
+
+// Function to free the rail matrix
+void free_rail_matrix(char** rail, int rails) {
+    for (int i = 0; i < rails; i++) {
+        free(rail[i]);
+    }
+    free(rail);
+}
+
 // Rail Fence Cipher Encryption
-char* rail_fence_encrypt(const char* plaintext, int rails) {
-    int len = strlen(plaintext);
-    int *railLens = calloc(rails, sizeof(int));
-    int dir = 1, row = 0;
+char* rail_fence_encrypt(const char* text, int rails) {
+    int len = strlen(text);
+    char** rail = create_rail_matrix(rails, len);
+    int row = 0, col = 0, dir_down = 1;
 
     for (int i = 0; i < len; i++) {
-        railLens[row]++;
-        row += dir;
-        if (row == rails - 1 || row == 0) dir = -dir;
-    }
+        rail[row][col++] = text[i];
 
-    char **railsArray = malloc(rails * sizeof(char *));
-    for (int i = 0, pos = 0; i < rails; i++) {
-        railsArray[i] = malloc(railLens[i] + 1);
-        for (int j = 0; j < railLens[i]; j++) {
-            railsArray[i][j] = plaintext[pos++];
+        if (row == 0) {
+            dir_down = 1;
+        } else if (row == rails - 1) {
+            dir_down = 0;
         }
-        railsArray[i][railLens[i]] = '\0';
+
+        row += dir_down ? 1 : -1;
     }
 
-    char *encrypted = malloc(len + 1);
-    for (int i = 0, pos = 0; i < rails; i++) {
-        memcpy(encrypted + pos, railsArray[i], railLens[i]);
-        pos += railLens[i];
-        free(railsArray[i]);
+    char* result = malloc(len + 1);
+    int idx = 0;
+    for (int i = 0; i < rails; i++) {
+        for (int j = 0; j < col; j++) {
+            if (rail[i][j] != '\0') {
+                result[idx++] = rail[i][j];
+            }
+        }
     }
-    encrypted[len] = '\0';
-    free(railsArray);
-    free(railLens);
+    result[idx] = '\0';
 
-    return encrypted;
+    free_rail_matrix(rail, rails);
+    return result;
 }
 
 // Rail Fence Cipher Decryption
-char* rail_fence_decrypt(const char* ciphertext, int rails) {
-    int len = strlen(ciphertext);
-    int *railLens = calloc(rails, sizeof(int));
-    int dir = 1, row = 0;
+char* rail_fence_decrypt(const char* text, int rails) {
+    int len = strlen(text);
+    char** rail = create_rail_matrix(rails, len);
 
+    int row = 0, col = 0, dir_down = 1;
     for (int i = 0; i < len; i++) {
-        railLens[row]++;
-        row += dir;
-        if (row == rails - 1 || row == 0) dir = -dir;
+        rail[row][col++] = '*'; // Place markers
+
+        if (row == 0) {
+            dir_down = 1;
+        } else if (row == rails - 1) {
+            dir_down = 0;
+        }
+
+        row += dir_down ? 1 : -1;
     }
 
-    char **railsArray = malloc(rails * sizeof(char *));
-    for (int i = 0, pos = 0; i < rails; i++) {
-        railsArray[i] = malloc(railLens[i] + 1);
-        memcpy(railsArray[i], ciphertext + pos, railLens[i]);
-        railsArray[i][railLens[i]] = '\0';
-        pos += railLens[i];
+    int idx = 0;
+    for (int i = 0; i < rails; i++) {
+        for (int j = 0; j < col; j++) {
+            if (rail[i][j] == '*') {
+                rail[i][j] = text[idx++];
+            }
+        }
     }
 
-    char *decrypted = malloc(len + 1);
-    int *currentPos = calloc(rails, sizeof(int));
-    for (int i = 0, row = 0, dir = 1; i < len; i++) {
-        decrypted[i] = railsArray[row][currentPos[row]++];
-        row += dir;
-        if (row == rails - 1 || row == 0) dir = -dir;
+    char* result = malloc(len + 1);
+    idx = 0; row = 0; col = 0; dir_down = 1;
+    for (int i = 0; i < len; i++) {
+        result[idx++] = rail[row][col++];
+        if (row == 0) {
+            dir_down = 1;
+        } else if (row == rails - 1) {
+            dir_down = 0;
+        }
+
+        row += dir_down ? 1 : -1;
     }
-    decrypted[len] = '\0';
+    result[idx] = '\0';
 
-    for (int i = 0; i < rails; i++) free(railsArray[i]);
-    free(railsArray);
-    free(railLens);
-    free(currentPos);
-
-    return decrypted;
+    free_rail_matrix(rail, rails);
+    return result;
 }
 
 

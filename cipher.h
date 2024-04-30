@@ -21,6 +21,10 @@ char* rail_fence_cipher_encrypt(const char *plaintext, int rails);
 // Function for the Rail Fence cipher decryption
 char* rail_fence_cipher_decrypt(const char *ciphertext, int rails);
 
+// Utility functions to create and free the rail matrix
+char** create_rail_matrix(int rails, int length);
+void free_rail_matrix(char** rail, int rails);
+
 // Function to write data to a file
 void write_to_file(const char* file);
 
