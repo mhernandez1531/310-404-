@@ -1,4 +1,4 @@
-#include "cipher.h"
+#include "cipher.h"i
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -9,6 +9,79 @@
 #define ALPHABET_SIZE 26
 #define DEFAULT_SEED "some_seed_string"
 
+// Rail Fence Cipher Encryption
+char* rail_fence_encrypt(const char* plaintext, int rails) {
+    int len = strlen(plaintext);
+    int *railLens = calloc(rails, sizeof(int));
+    int dir = 1, row = 0;
+
+    for (int i = 0; i < len; i++) {
+        railLens[row]++;
+        row += dir;
+        if (row == rails - 1 || row == 0) dir = -dir;
+    }
+
+    char **railsArray = malloc(rails * sizeof(char *));
+    for (int i = 0, pos = 0; i < rails; i++) {
+        railsArray[i] = malloc(railLens[i] + 1);
+        for (int j = 0; j < railLens[i]; j++) {
+            railsArray[i][j] = plaintext[pos++];
+        }
+        railsArray[i][railLens[i]] = '\0';
+    }
+
+    char *encrypted = malloc(len + 1);
+    for (int i = 0, pos = 0; i < rails; i++) {
+        memcpy(encrypted + pos, railsArray[i], railLens[i]);
+        pos += railLens[i];
+        free(railsArray[i]);
+    }
+    encrypted[len] = '\0';
+    free(railsArray);
+    free(railLens);
+
+    return encrypted;
+}
+
+// Rail Fence Cipher Decryption
+char* rail_fence_decrypt(const char* ciphertext, int rails) {
+    int len = strlen(ciphertext);
+    int *railLens = calloc(rails, sizeof(int));
+    int dir = 1, row = 0;
+
+    for (int i = 0; i < len; i++) {
+        railLens[row]++;
+        row += dir;
+        if (row == rails - 1 || row == 0) dir = -dir;
+    }
+
+    char **railsArray = malloc(rails * sizeof(char *));
+    for (int i = 0, pos = 0; i < rails; i++) {
+        railsArray[i] = malloc(railLens[i] + 1);
+        memcpy(railsArray[i], ciphertext + pos, railLens[i]);
+        railsArray[i][railLens[i]] = '\0';
+        pos += railLens[i];
+    }
+
+    char *decrypted = malloc(len + 1);
+    int *currentPos = calloc(rails, sizeof(int));
+    for (int i = 0, row = 0, dir = 1; i < len; i++) {
+        decrypted[i] = railsArray[row][currentPos[row]++];
+        row += dir;
+        if (row == rails - 1 || row == 0) dir = -dir;
+    }
+    decrypted[len] = '\0';
+
+    for (int i = 0; i < rails; i++) free(railsArray[i]);
+    free(railsArray);
+    free(railLens);
+    free(currentPos);
+
+    return decrypted;
+}
+
+
+/*
 // Rail Fence Cipher Encryption
 char* rail_fence_encrypt(const char* message, int rails) {
     int len = strlen(message);
@@ -36,7 +109,7 @@ char* rail_fence_encrypt(const char* message, int rails) {
     encrypted[k] = '\0';  // Add the null terminator
     return encrypted;
 }
-/*
+
 // Rail Fence Cipher Decryption
 char* rail_fence_decrypt(const char* message, int rails) {
     int len = strlen(message);
@@ -65,7 +138,6 @@ char* rail_fence_decrypt(const char* message, int rails) {
     decrypted[len] = '\0';  // Add the null terminator
     return decrypted;
 }
-*/
 
 char* rail_fence_decrypt(const char* message, int rails) {
     int len = strlen(message);
@@ -98,7 +170,7 @@ char* rail_fence_decrypt(const char* message, int rails) {
     return decrypted;
 }
 
-
+*/
 
 // Caesar Cipher Encryption and Decryption
 char caesar_cipher(char ch, int shift) {
@@ -207,7 +279,8 @@ void rail_fence_decrypt_file(const char* input_path, const char* output_path, in
 
     char buffer[1024];
     while (fgets(buffer, sizeof(buffer), input)) {
-        char* decrypted = rail_fence_decrypt(buffer, rails);
+        buffer[strcspn(buffer, "\n")] = 0;
+	char* decrypted = rail_fence_decrypt(buffer, rails);
         fprintf(output, "%s", decrypted);
         free(decrypted);
     }
