@@ -36,7 +36,7 @@ char* rail_fence_encrypt(const char* message, int rails) {
     encrypted[k] = '\0';  // Add the null terminator
     return encrypted;
 }
-
+/*
 // Rail Fence Cipher Decryption
 char* rail_fence_decrypt(const char* message, int rails) {
     int len = strlen(message);
@@ -65,6 +65,50 @@ char* rail_fence_decrypt(const char* message, int rails) {
     decrypted[len] = '\0';  // Add the null terminator
     return decrypted;
 }
+*/
+
+char* rail_fence_decrypt(const char* message, int rails) {
+    int len = strlen(message);
+    char* decrypted = (char*)malloc(len + 1); // Allocate memory for the decrypted text
+    if (!decrypted) {
+        perror("Memory allocation failed");
+        exit(EXIT_FAILURE);
+    }
+
+    // Initialize the decrypted text with null characters
+    memset(decrypted, '\0', len + 1);
+
+    int* mark = (int*)calloc(len, sizeof(int)); // To mark visited positions in the message
+    int k = 0, idx = 0;
+
+    // Traverse through each rail
+    for (int r = 0; r < rails; r++) {
+        int pos = r;
+        int down = 1; // Direction indicator: 1 for down, 0 for up
+        while (pos < len) {
+            if (mark[pos] == 0) { // If position is not yet visited
+                decrypted[pos] = message[k++];
+                mark[pos] = 1; // Mark this position as visited
+            }
+
+            // Calculate the next position
+            if (r == 0 || r == rails - 1) { // First and last rails
+                pos += 2 * (rails - 1);
+            } else if (down) { // Middle rails going down
+                pos += 2 * (rails - r - 1);
+                down = 0; // Change direction to up
+            } else { // Middle rails going up
+                pos += 2 * r;
+                down = 1; // Change direction to down
+            }
+        }
+    }
+
+    free(mark); // Free the used memory
+    return decrypted; // Return the decrypted message
+}
+
+
 
 // Caesar Cipher Encryption and Decryption
 char caesar_cipher(char ch, int shift) {
