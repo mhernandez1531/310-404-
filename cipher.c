@@ -53,18 +53,24 @@ char* rail_fence_decrypt(const char* message, int rails) {
 
     int rail_len = 2 * rails - 2;
     int k = 0;
-    int cycle = 2 * (rails - 1);
 
     for (int i = 0; i < rails; i++) {
-        for (int j = i; j < len; j += cycle) {
+        int j = i;
+        while (j < len) {
             decrypted[j] = message[k++];
-            if (i != 0 && i != rails - 1 && j + cycle - 2 * i < len)
-                decrypted[j + cycle - 2 * i] = message[k++];
+            if (i > 0 && i < rails - 1) {
+                int next = j + rail_len - 2 * i;
+                if (next < len) {
+                    decrypted[next] = message[k++];
+                }
+            }
+            j += rail_len;
         }
     }
     decrypted[len] = '\0';  // Add the null terminator
     return decrypted;
 }
+
 
 // Caesar Cipher Encryption and Decryption
 char caesar_cipher(char ch, int shift) {
