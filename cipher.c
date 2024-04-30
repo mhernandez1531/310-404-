@@ -9,10 +9,6 @@
 #define ALPHABET_SIZE 26
 #define DEFAULT_SEED "some_seed_string"
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
 // Function to create and initialize the rail matrix for the rail fence cipher
 char** create_rail_matrix(int rails, int length) {
     char** rail = malloc(rails * sizeof(char*));
