@@ -281,8 +281,9 @@ void rail_fence_encrypt_file(const char* input_path, const char* output_path, in
 
     char buffer[1024];
     while (fgets(buffer, sizeof(buffer), input)) {
+	buffer[strcspn(buffer, "\n")] = 0;
         char* encrypted = rail_fence_encrypt(buffer, rails);
-        fprintf(output, "%s", encrypted);
+        fprintf(output, "%s\n", encrypted);
         free(encrypted);
     }
 
@@ -309,7 +310,7 @@ void rail_fence_decrypt_file(const char* input_path, const char* output_path, in
     while (fgets(buffer, sizeof(buffer), input)) {
         buffer[strcspn(buffer, "\n")] = 0;
 	char* decrypted = rail_fence_decrypt(buffer, rails);
-        fprintf(output, "%s", decrypted);
+        fprintf(output, "%s\n", decrypted);
         free(decrypted);
     }
 
