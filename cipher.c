@@ -75,37 +75,27 @@ char* rail_fence_decrypt(const char* message, int rails) {
         exit(EXIT_FAILURE);
     }
 
-    // Initialize the decrypted text with null characters
-    memset(decrypted, '\0', len + 1);
+    // Calculate the cycle length
+    int cycle = 2 * (rails - 1);
+    memset(decrypted, '\0', len + 1); // Ensure the string is null-terminated
 
-    int* mark = (int*)calloc(len, sizeof(int)); // To mark visited positions in the message
-    int k = 0, idx = 0;
+    int index = 0; // To track the position in the message array
 
-    // Traverse through each rail
+    // Iterate over each rail
     for (int r = 0; r < rails; r++) {
-        int pos = r;
-        int down = 1; // Direction indicator: 1 for down, 0 for up
-        while (pos < len) {
-            if (mark[pos] == 0) { // If position is not yet visited
-                decrypted[pos] = message[k++];
-                mark[pos] = 1; // Mark this position as visited
-            }
+        int pos = r; // Start position for each rail
+        int step1 = 2 * (rails - r - 1); // Step size moving down
+        int step2 = cycle - step1; // Step size moving up
 
-            // Calculate the next position
-            if (r == 0 || r == rails - 1) { // First and last rails
-                pos += 2 * (rails - 1);
-            } else if (down) { // Middle rails going down
-                pos += 2 * (rails - r - 1);
-                down = 0; // Change direction to up
-            } else { // Middle rails going up
-                pos += 2 * r;
-                down = 1; // Change direction to down
-            }
+        int toggle = 0; // To toggle between step1 and step2
+
+        while (pos < len) {
+            decrypted[pos] = message[index++];
+            pos += (toggle == 0 || r == 0 || r == rails - 1) ? cycle : (toggle = 1 - toggle) ? step1 : step2;
         }
     }
 
-    free(mark); // Free the used memory
-    return decrypted; // Return the decrypted message
+    return decrypted;
 }
 
 
