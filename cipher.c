@@ -53,24 +53,18 @@ char* rail_fence_decrypt(const char* message, int rails) {
 
     int rail_len = 2 * rails - 2;
     int k = 0;
+    int cycle = 2 * (rails - 1);
 
     for (int i = 0; i < rails; i++) {
-        int j = i;
-        while (j < len) {
+        for (int j = i; j < len; j += cycle) {
             decrypted[j] = message[k++];
-            if (i > 0 && i < rails - 1) {
-                int next = j + rail_len - 2 * i;
-                if (next < len) {
-                    decrypted[next] = message[k++];
-                }
-            }
-            j += rail_len;
+            if (i != 0 && i != rails - 1 && j + cycle - 2 * i < len)
+                decrypted[j + cycle - 2 * i] = message[k++];
         }
     }
     decrypted[len] = '\0';  // Add the null terminator
     return decrypted;
 }
-
 
 // Caesar Cipher Encryption and Decryption
 char caesar_cipher(char ch, int shift) {
@@ -177,25 +171,13 @@ void rail_fence_decrypt_file(const char* input_path, const char* output_path, in
         exit(EXIT_FAILURE);
     }
 
-    fseek(input, 0, SEEK_END);
-    long input_size = ftell(input);
-    rewind(input);
-    char* buffer = (char*)malloc(input_size + 1);
-    if (!buffer) {
-        fclose(input);
-        fclose(output);
-        fprintf(stderr, "Memory allocation failed\n");
-        exit(EXIT_FAILURE);
+    char buffer[1024];
+    while (fgets(buffer, sizeof(buffer), input)) {
+        char* decrypted = rail_fence_decrypt(buffer, rails);
+        fprintf(output, "%s", decrypted);
+        free(decrypted);
     }
-    fread(buffer, 1, input_size, input);
-    buffer[input_size] = '\0';
 
-    char* decrypted = rail_fence_decrypt(buffer, rails);
-
-    fprintf(output, "%s", decrypted);
-
-    free(buffer);
-    free(decrypted);
     fclose(input);
     fclose(output);
 }
@@ -203,7 +185,6 @@ void rail_fence_decrypt_file(const char* input_path, const char* output_path, in
 // Write Data to File
 void write_to_file(const char* file) {
 }
-
 
 /*
 FUNCTION process_file(string input_path, string output_path, integer shift)
