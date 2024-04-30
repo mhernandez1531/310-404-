@@ -1,4 +1,4 @@
-#include "cipher.h"
+#include "cipher.h"i
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -9,6 +9,103 @@
 #define ALPHABET_SIZE 26
 #define DEFAULT_SEED "some_seed_string"
 
+// Function to create and initialize the rail matrix for the rail fence cipher
+char** create_rail_matrix(int rails, int length) {
+    char** rail = malloc(rails * sizeof(char*));
+    for (int i = 0; i < rails; i++) {
+        rail[i] = calloc(length, sizeof(char)); // Use calloc to initialize to null characters
+    }
+    return rail;
+}
+
+// Function to free the rail matrix
+void free_rail_matrix(char** rail, int rails) {
+    for (int i = 0; i < rails; i++) {
+        free(rail[i]);
+    }
+    free(rail);
+}
+
+// Rail Fence Cipher Encryption
+char* rail_fence_encrypt(const char* text, int rails) {
+    int len = strlen(text);
+    char** rail = create_rail_matrix(rails, len);
+    int row = 0, col = 0, dir_down = 1;
+
+    for (int i = 0; i < len; i++) {
+        rail[row][col++] = text[i];
+
+        if (row == 0) {
+            dir_down = 1;
+        } else if (row == rails - 1) {
+            dir_down = 0;
+        }
+
+        row += dir_down ? 1 : -1;
+    }
+
+    char* result = malloc(len + 1);
+    int idx = 0;
+    for (int i = 0; i < rails; i++) {
+        for (int j = 0; j < col; j++) {
+            if (rail[i][j] != '\0') {
+                result[idx++] = rail[i][j];
+            }
+        }
+    }
+    result[idx] = '\0';
+
+    free_rail_matrix(rail, rails);
+    return result;
+}
+
+// Rail Fence Cipher Decryption
+char* rail_fence_decrypt(const char* text, int rails) {
+    int len = strlen(text);
+    char** rail = create_rail_matrix(rails, len);
+
+    int row = 0, col = 0, dir_down = 1;
+    for (int i = 0; i < len; i++) {
+        rail[row][col++] = '*'; // Place markers
+
+        if (row == 0) {
+            dir_down = 1;
+        } else if (row == rails - 1) {
+            dir_down = 0;
+        }
+
+        row += dir_down ? 1 : -1;
+    }
+
+    int idx = 0;
+    for (int i = 0; i < rails; i++) {
+        for (int j = 0; j < col; j++) {
+            if (rail[i][j] == '*') {
+                rail[i][j] = text[idx++];
+            }
+        }
+    }
+
+    char* result = malloc(len + 1);
+    idx = 0; row = 0; col = 0; dir_down = 1;
+    for (int i = 0; i < len; i++) {
+        result[idx++] = rail[row][col++];
+        if (row == 0) {
+            dir_down = 1;
+        } else if (row == rails - 1) {
+            dir_down = 0;
+        }
+
+        row += dir_down ? 1 : -1;
+    }
+    result[idx] = '\0';
+
+    free_rail_matrix(rail, rails);
+    return result;
+}
+
+
+/*
 // Rail Fence Cipher Encryption
 char* rail_fence_encrypt(const char* message, int rails) {
     int len = strlen(message);
@@ -65,6 +162,39 @@ char* rail_fence_decrypt(const char* message, int rails) {
     decrypted[len] = '\0';  // Add the null terminator
     return decrypted;
 }
+
+char* rail_fence_decrypt(const char* message, int rails) {
+    int len = strlen(message);
+    char* decrypted = (char*)malloc(len + 1); // Allocate memory for the decrypted text
+    if (!decrypted) {
+        perror("Memory allocation failed");
+        exit(EXIT_FAILURE);
+    }
+
+    // Calculate the cycle length
+    int cycle = 2 * (rails - 1);
+    memset(decrypted, '\0', len + 1); // Ensure the string is null-terminated
+
+    int index = 0; // To track the position in the message array
+
+    // Iterate over each rail
+    for (int r = 0; r < rails; r++) {
+        int pos = r; // Start position for each rail
+        int step1 = 2 * (rails - r - 1); // Step size moving down
+        int step2 = cycle - step1; // Step size moving up
+
+        int toggle = 0; // To toggle between step1 and step2
+
+        while (pos < len) {
+            decrypted[pos] = message[index++];
+            pos += (toggle == 0 || r == 0 || r == rails - 1) ? cycle : (toggle = 1 - toggle) ? step1 : step2;
+        }
+    }
+
+    return decrypted;
+}
+
+*/
 
 // Caesar Cipher Encryption and Decryption
 char caesar_cipher(char ch, int shift) {
@@ -147,8 +277,9 @@ void rail_fence_encrypt_file(const char* input_path, const char* output_path, in
 
     char buffer[1024];
     while (fgets(buffer, sizeof(buffer), input)) {
+	buffer[strcspn(buffer, "\n")] = 0;
         char* encrypted = rail_fence_encrypt(buffer, rails);
-        fprintf(output, "%s", encrypted);
+        fprintf(output, "%s\n", encrypted);
         free(encrypted);
     }
 
@@ -173,8 +304,9 @@ void rail_fence_decrypt_file(const char* input_path, const char* output_path, in
 
     char buffer[1024];
     while (fgets(buffer, sizeof(buffer), input)) {
-        char* decrypted = rail_fence_decrypt(buffer, rails);
-        fprintf(output, "%s", decrypted);
+        buffer[strcspn(buffer, "\n")] = 0;
+	char* decrypted = rail_fence_decrypt(buffer, rails);
+        fprintf(output, "%s\n", decrypted);
         free(decrypted);
     }
 
