@@ -195,7 +195,8 @@ void rail_fence_decrypt_file(const char* input_path, const char* output_path, in
 }
 
 // Write Data to File
-void write_to_file(const char* file
+void write_to_file(const char* file) {
+}
 
 
 /*
