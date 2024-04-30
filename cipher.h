@@ -22,7 +22,7 @@ char* rail_fence_cipher_encrypt(const char *plaintext, int rails);
 char* rail_fence_cipher_decrypt(const char *ciphertext, int rails);
 
 // Function to write data to a file
-void write_to_file(const char* file_path, const char* data);
+void write_to_file(const char* file);
 
 // Function to encrypt a file using Rail Fence cipher and write the result to another file
 void rail_fence_encrypt_file(const char *input_path, const char *output_path, int rails);
